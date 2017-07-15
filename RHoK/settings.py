@@ -27,8 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [u'41b3265a.ngrok.io']
 
-ROOT_URLCONF = 'RHoK.urls'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'Registration',
+    'app',
 ]
 
 REST_FRAMEWORK = {

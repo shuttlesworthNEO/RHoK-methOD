@@ -17,8 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers, serializers, viewsets
 from Registration.views import SignupView, LoginView
+from app.views import KeyView
 
 urlpatterns = [
+    url('key/', KeyView),
     url('login/', LoginView),
     url('signup/', SignupView),
     url(r'^admin/', admin.site.urls),
