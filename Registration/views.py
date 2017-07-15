@@ -45,6 +45,7 @@ def LoginView(request):
         if check_password(password, user.password):
             resp = {
                 'code' : 200,
+                'user_key' : user.key,
             }
     else:
         resp = {
