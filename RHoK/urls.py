@@ -17,9 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers, serializers, viewsets
 from Registration.views import SignupView, LoginView
-from app.views import QueryView, TakeupView, ResolvedView, FeedView, CheckView, SetView
+from app.views import QueryView, TakeupView, ResolvedView, FeedView, CheckView, SetView, LeaderView
 
 urlpatterns = [
+    url('leader', LeaderView),
     url('set/', SetView),
     url('check/', CheckView),
     url('feed/', FeedView),

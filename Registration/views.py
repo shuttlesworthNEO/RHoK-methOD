@@ -36,6 +36,7 @@ def SignupView(request):
 @csrf_exempt
 def LoginView(request):
     if request.method == 'POST':
+        print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
         username = data['username']
         password = data['password']

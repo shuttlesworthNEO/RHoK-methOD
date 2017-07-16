@@ -7,6 +7,8 @@ from Registration.models import UserModel
 import json
 from django.views.decorators.csrf import csrf_exempt
 from models import QueryModel, TakeupModel
+from django.db.models import Q
+
 # Create your views here.
 
 @csrf_exempt
@@ -32,17 +34,23 @@ def QueryView(request):
 @csrf_exempt
 def TakeupView(request):
     if request.method == 'POST':
+        print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
         user_key = data['user_key']
         query_id = data['id']
         user_obj = UserModel.objects.filter(key=user_key).first()
         query_obj = QueryModel.objects.filter(id=query_id).first()
-        takeup_obj = TakeupModel(user=user_obj, query=query_obj, takenup=True)
-        takeup_obj.save()
-        resp = {
-            'code' : 200,
-            'phone' : query_obj.phone,
-        }
+        if not TakeupModel.objects.filter(Q(user=user_obj) & Q(query=query_obj)).exists():
+            takeup_obj = TakeupModel(user=user_obj, query=query_obj, takenup=True)
+            takeup_obj.save()
+            resp = {
+                'code' : 200,
+                'phone' : query_obj.phone,
+            }
+        else:
+            resp = {
+                'code' : 200,
+            }
     else:
         resp = {
             'code' : 400,
@@ -53,16 +61,15 @@ def TakeupView(request):
 @csrf_exempt
 def ResolvedView(request):
     if request.method == 'POST':
+        print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
         user_key = data['user_key']
         id = data['id']
         query_obj = QueryModel.objects.filter(id=id).first()
-        for x in query_obj:
-            print x.id
         TakeupModel.objects.filter(query=query_obj).delete()
         if data['resolved'] == '1':
             user = UserModel.objects.get(key=user_key)
-            user.points += 5
+            user.points += 10
             user.save()
             QueryModel.objects.filter(id=id).delete()
         resp = {
@@ -78,6 +85,7 @@ def ResolvedView(request):
 @csrf_exempt
 def FeedView(request):
     if request.method == 'POST':
+        print request.body
         query_obj = QueryModel.objects.all()
         query = []
         for x in query_obj:
@@ -101,6 +109,7 @@ def FeedView(request):
 @csrf_exempt
 def CheckView(request):
     if request.method == 'POST':
+        print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
         id = data['id']
         query_obj = QueryModel.objects.filter(id=id).first()
@@ -119,11 +128,15 @@ def CheckView(request):
 @csrf_exempt
 def SetView(request):
     if request.method == 'POST':
+        print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
         if data['set'] == '1':
+            print "I'm here"
             id = data['id']
             query_obj = QueryModel.objects.filter(id=id).first()
+            query_obj
             taken = TakeupModel.objects.get(query=query_obj)
+            print taken
             taken.resolved = True
             taken.save()
         else:
@@ -139,4 +152,16 @@ def SetView(request):
         }
 
     return JsonResponse(resp, safe=False)
+
+def LeaderView(request):
+    if request.method == "GET":
+        user = UserModel.objects.order_by('-points').all()
+        temp = []
+        for x in user:
+            d = {
+                'username' : x.username,
+                'score' : x.points,
+            }
+            temp.append(d)
+        return render(request, "leaderboard.html", {'data' : temp})
 
