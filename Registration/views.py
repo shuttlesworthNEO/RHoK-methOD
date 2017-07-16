@@ -19,9 +19,8 @@ def SignupView(request):
         username = data['username']
         email = data['email']
         password = make_password(data['password'])
-        language = data['language']
         key = data['key']
-        user = UserModel(username=username, name=name, password=password, email=email, language=language, key=key)
+        user = UserModel(username=username, name=name, password=password, email=email, key=key)
         print user
         user.save()
         if UserModel.objects.filter(key=key).exists():

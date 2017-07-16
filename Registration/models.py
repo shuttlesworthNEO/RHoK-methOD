@@ -10,7 +10,6 @@ class UserModel(models.Model):
     name = models.CharField(max_length=120)
     username = models.CharField(max_length=120)
     password = models.CharField(max_length=40)
-    language = models.CharField(max_length=120, default='English')
     points = models.IntegerField(default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

@@ -17,14 +17,15 @@ from django.conf.urls import url
 from django.contrib import admin
 from rest_framework import routers, serializers, viewsets
 from Registration.views import SignupView, LoginView
-from app.views import KeyView, QueryView, TakeupView, ResolvedView, FeedView
+from app.views import QueryView, TakeupView, ResolvedView, FeedView, CheckView, SetView
 
 urlpatterns = [
+    url('set/', SetView),
+    url('check/', CheckView),
     url('feed/', FeedView),
-    url('resolved,', ResolvedView),
+    url('resolved/', ResolvedView),
     url('takeup/', TakeupView),
     url('create/', QueryView),
-    url('key/', KeyView),
     url('login/', LoginView),
     url('signup/', SignupView),
     url(r'^admin/', admin.site.urls),
