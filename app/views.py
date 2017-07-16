@@ -54,12 +54,16 @@ def TakeupView(request):
 def ResolvedView(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode(encoding='UTF-8'))
+        user_key = data['user_key']
         id = data['id']
         query_obj = QueryModel.objects.filter(id=id).first()
         for x in query_obj:
             print x.id
         TakeupModel.objects.filter(query=query_obj).delete()
         if data['resolved'] == '1':
+            user = UserModel.objects.get(key=user_key)
+            user.points += 5
+            user.save()
             QueryModel.objects.filter(id=id).delete()
         resp = {
             'code' : 200,
