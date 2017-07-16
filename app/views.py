@@ -63,15 +63,22 @@ def ResolvedView(request):
     if request.method == 'POST':
         print request.body
         data = json.loads(request.body.decode(encoding='UTF-8'))
-        user_key = data['user_key']
-        id = data['id']
-        query_obj = QueryModel.objects.filter(id=id).first()
-        TakeupModel.objects.filter(query=query_obj).delete()
-        if data['resolved'] == '1':
-            user = UserModel.objects.get(key=user_key)
-            user.points += 10
-            user.save()
-            QueryModel.objects.filter(id=id).delete()
+        user_key = 'priv3'
+        query_key = 'nonpriv'
+        user_obj = UserModel.objects.filter(key=user_key)
+        query_obj = QueryModel.objects.filter(key=query_key).all()
+        a = None
+        for x in query_obj:
+            temp = TakeupModel.objects.filter(Q(user=user_obj) & Q(query=x)).first()
+            if temp.resolved:
+                a = temp.query
+                break
+        id = a.id
+        TakeupModel.objects.filter(query=a).delete()
+        user = UserModel.objects.get(key=user_key)
+        user.points += 10
+        user.save()
+        QueryModel.objects.filter(id=id).delete()
         resp = {
             'code' : 200,
         }

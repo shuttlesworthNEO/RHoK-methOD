@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">RHoK-methOD</string>
+    <string name="title_activity_sign_in">SignIn</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_query_taken">QueryTaken</string>
+    <string name="action_share_screen">Share Screen</string>
+    <string name="dialog_init_fail">Oops! Seems like you haven\'t configured the application with your key. \n\nMake sure you create a key and secret on our developer console (https://developer.temasys.com.sg ) and include it in the MainActivity</string>
+    <string name="ok">OK</string>
+</resources>
